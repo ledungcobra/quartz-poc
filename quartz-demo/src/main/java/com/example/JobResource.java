@@ -1,6 +1,7 @@
 package com.example;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.quartz.JobBuilder;
@@ -30,6 +31,12 @@ public class JobResource {
         this.scheduler = scheduler;
     }
 
+    /**
+     * Create a job
+     * 
+     * @param jobRequest
+     * @return
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
@@ -39,13 +46,17 @@ public class JobResource {
                     .withIdentity(jobRequest.getName(), jobRequest.getGroup())
                     .build();
 
+            // Calculate the start time with delay
+            long delayInSeconds = jobRequest.getDelayInSeconds();
+            Date startTime = new Date(System.currentTimeMillis() + delayInSeconds * 1000);
+
             TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger()
                     .withIdentity(jobRequest.getName() + "Trigger", jobRequest.getGroup())
-                    .startNow();
+                    .startAt(startTime); // Set the start time with delay
 
             if ("repeated".equalsIgnoreCase(jobRequest.getType())) {
                 triggerBuilder.withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                        .withIntervalInSeconds(jobRequest.getInterval())
+                        .withIntervalInSeconds(jobRequest.getIntervalInSeconds())
                         .repeatForever());
             }
 

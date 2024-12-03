@@ -15,7 +15,7 @@ import org.quartz.impl.StdSchedulerFactory;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        final int port = 8084;
+        final int port = 8080;
         Properties properties = loadConfig();
 
         SchedulerFactory schedulerFactory = new StdSchedulerFactory(properties);

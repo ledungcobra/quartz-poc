@@ -3,8 +3,9 @@ package com.example;
 public class JobRequest {
     private String name;
     private String group;
-    private int interval;
+    private int intervalInSeconds;
     private String type;
+    private int delayInSeconds;
 
     public String getName() {
         return name;
@@ -14,11 +15,15 @@ public class JobRequest {
         return group;
     }
 
-    public int getInterval() {
-        return interval;
+    public int getIntervalInSeconds() {
+        return intervalInSeconds;
     }
 
     public String getType() {
         return type;
+    }
+
+    public int getDelayInSeconds() {
+        return delayInSeconds;
     }
 }
