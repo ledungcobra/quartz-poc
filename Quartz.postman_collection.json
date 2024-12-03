@@ -1,0 +1,78 @@
+{
+	"info": {
+		"_postman_id": "cc5d40f4-9960-4896-96db-a8747416608e",
+		"name": "Quartz",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24064867"
+	},
+	"item": [
+		{
+			"name": "Get Jobs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/jobs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"jobs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Job",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/jobs/group1/myJob",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"jobs",
+						"group1",
+						"myJob"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Job",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"type\": \"ONE SHOT\",\r\n    \"name\": \"Demo Task\",\r\n    \"group\": \"test1\",\r\n    \"interval\": 25\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/jobs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"jobs"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,19 +1,45 @@
 package com.example;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.quartz.JobBuilder;
-import org.quartz.JobDetail;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
-import org.quartz.SimpleScheduleBuilder;
-import org.quartz.Trigger;
-import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 
 public class Main {
     public static void main(String[] args) throws Exception {
+        final int port = 8084;
+        Properties properties = loadConfig();
+
+        SchedulerFactory schedulerFactory = new StdSchedulerFactory(properties);
+        Scheduler scheduler = schedulerFactory.getScheduler();
+        scheduler.start();
+
+        Server server = new Server(port);
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        context.setContextPath("/");
+        server.setHandler(context);
+
+        // Configure Jersey
+        ResourceConfig config = new ResourceConfig();
+        config.register(new JobResource(scheduler));
+        ServletContainer servletContainer = new ServletContainer(config);
+        context.addServlet(new ServletHolder(servletContainer), "/*");
+
+        // Start Jetty server
+        server.start();
+        System.out.println("Server started on port " + port);
+        server.join();
+    }
+
+    private static Properties loadConfig() throws IOException {
         Properties properties = new Properties();
         try (InputStream input = Main.class.getClassLoader().getResourceAsStream("quartz.properties")) {
             if (input == null) {
@@ -22,23 +48,6 @@ public class Main {
             }
             properties.load(input);
         }
-        // Create SchedulerFactory with properties
-        SchedulerFactory schedulerFactory = new StdSchedulerFactory(properties);
-        Scheduler scheduler = schedulerFactory.getScheduler();
-
-        // JobDetail job = JobBuilder.newJob(MyJob.class)
-        //         .withIdentity("myJob", "group1")
-        //         .build();
-
-        // Trigger trigger = TriggerBuilder.newTrigger()
-        //         .withIdentity("myTrigger", "group1")
-        //         .startNow()
-        //         .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-        //                 .withIntervalInSeconds(10)
-        //                 .repeatForever())
-        //         .build();
-
-        // scheduler.scheduleJob(job, trigger);
-        scheduler.start();
+        return properties;
     }
 }
