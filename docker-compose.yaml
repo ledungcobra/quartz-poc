@@ -1,18 +1,16 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  postgres:
-    image: postgres:13
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
     environment:
-      POSTGRES_USER: yourusername
-      POSTGRES_PASSWORD: yourpassword
-      POSTGRES_DB: quartz
+      SA_PASSWORD: yourStrong(!)Password
+      ACCEPT_EULA: "Y"
     ports:
-      - "5432:5432"
+      - "1433:1433"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      - ./init-quartz.sql:/docker-entrypoint-initdb.d/init-quartz.sql
-
+      - mssql_data:/var/opt/mssql
+      - ./init-sql-server-quartz.sql:/docker-entrypoint-initdb.d/init-quartz.sql
 
 volumes:
-  postgres_data:
+  mssql_data:

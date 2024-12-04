@@ -74,5 +74,10 @@
             <artifactId>jersey-hk2</artifactId>
             <version>3.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>10.2.0.jre17</version> <!-- Use the latest version compatible with your Java version -->
+        </dependency>
     </dependencies>
 </project>
